@@ -1,0 +1,609 @@
+; Disassembly of file: sw-02
+; Sat Feb 24 12:09:29 2024
+; Type: ELF64
+; Syntax: MASM/ML64
+; Instruction set: Pentium Pro, x64
+
+; Error: symbol names contain illegal characters,
+; 3 Symbol names not changed
+option dotname
+
+public _end
+public _start
+public main
+public __libc_csu_init
+public __libc_csu_fini
+public _fini
+public _IO_stdin_used
+public __data_start
+public data_start                                       ; Note: Weak. Not supported by MASM 
+public __dso_handle
+public __TMC_END__
+public __bss_start
+public _edata
+
+extern __cxa_finalize: near
+extern _ITM_registerTMCloneTable: byte
+extern __gmon_start__: byte
+extern __libc_start_main: near
+extern _ITM_deregisterTMCloneTable: byte
+extern __cxa_finalize@@GLIBC_2.2.5: near
+extern _ITM_registerTMCloneTable: byte
+extern __gmon_start__: byte
+extern __libc_start_main@@GLIBC_2.2.5: near
+extern _ITM_deregisterTMCloneTable: byte
+
+
+.init   SEGMENT DWORD 'CODE'                            ; section number 1
+
+_init   LABEL NEAR
+        sub     rsp, 8                                  ; 1000 _ 48: 83. EC, 08
+        mov     rax, qword ptr [?_011]                  ; 1004 _ 48: 8B. 05, 00002FDD(rel)
+        test    rax, rax                                ; 100B _ 48: 85. C0
+        jz      ?_001                                   ; 100E _ 74, 02
+        call    rax                                     ; 1010 _ FF. D0
+?_001:  add     rsp, 8                                  ; 1012 _ 48: 83. C4, 08
+        ret                                             ; 1016 _ C3
+
+.init   ENDS
+
+.plt    SEGMENT PARA 'CODE'                             ; section number 2
+
+        push    qword ptr [?_014]                       ; 1020 _ FF. 35, 00002FE2(rel)
+        jmp     qword ptr [?_015]                       ; 1026 _ FF. 25, 00002FE4(rel)
+
+; Filling space: 4H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 40H, 00H
+
+ALIGN   8
+
+.plt    ENDS
+
+.plt.got SEGMENT ALIGN(8) 'CODE'                        ; section number 3
+
+
+?_002   LABEL NEAR
+        jmp     qword ptr [?_013]                       ; 1030 _ FF. 25, 00002FC2(rel)
+
+; Filling space: 2H
+; Filler type: NOP with prefixes
+;       db 66H, 90H
+
+ALIGN   8
+
+.plt.got ENDS
+
+_text   SEGMENT PARA 'CODE'                             ; section number 4
+
+_start  PROC
+        xor     ebp, ebp                                ; 1040 _ 31. ED
+        mov     r9, rdx                                 ; 1042 _ 49: 89. D1
+        pop     rsi                                     ; 1045 _ 5E
+        mov     rdx, rsp                                ; 1046 _ 48: 89. E2
+        and     rsp, 0FFFFFFFFFFFFFFF0H                 ; 1049 _ 48: 83. E4, F0
+        push    rax                                     ; 104D _ 50
+        push    rsp                                     ; 104E _ 54
+        lea     r8, [__libc_csu_fini]                   ; 104F _ 4C: 8D. 05, 0000013A(rel)
+        lea     rcx, [__libc_csu_init]                  ; 1056 _ 48: 8D. 0D, 000000D3(rel)
+        lea     rdi, [main]                             ; 105D _ 48: 8D. 3D, 000000C1(rel)
+        call    qword ptr [?_010]                       ; 1064 _ FF. 15, 00002F76(rel)
+        hlt                                             ; 106A _ F4
+; Filling space: 5H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 44H, 00H, 00H
+
+ALIGN   8
+
+deregister_tm_clones LABEL NEAR
+        lea     rdi, [_edata]                           ; 1070 _ 48: 8D. 3D, 00002FB1(rel)
+        lea     rax, [_edata]                           ; 1077 _ 48: 8D. 05, 00002FAA(rel)
+        cmp     rax, rdi                                ; 107E _ 48: 39. F8
+        jz      ?_003                                   ; 1081 _ 74, 15
+        mov     rax, qword ptr [?_009]                  ; 1083 _ 48: 8B. 05, 00002F4E(rel)
+        test    rax, rax                                ; 108A _ 48: 85. C0
+        jz      ?_003                                   ; 108D _ 74, 09
+        jmp     rax                                     ; 108F _ FF. E0
+
+; Filling space: 7H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 80H, 00H, 00H, 00H, 00H
+
+ALIGN   8
+?_003:  ret                                             ; 1098 _ C3
+_start  ENDP
+
+; Filling space: 7H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 80H, 00H, 00H, 00H, 00H
+
+ALIGN   8
+
+register_tm_clones LABEL NEAR
+        lea     rdi, [_edata]                           ; 10A0 _ 48: 8D. 3D, 00002F81(rel)
+        lea     rsi, [_edata]                           ; 10A7 _ 48: 8D. 35, 00002F7A(rel)
+        sub     rsi, rdi                                ; 10AE _ 48: 29. FE
+        mov     rax, rsi                                ; 10B1 _ 48: 89. F0
+        shr     rsi, 63                                 ; 10B4 _ 48: C1. EE, 3F
+        sar     rax, 3                                  ; 10B8 _ 48: C1. F8, 03
+        add     rsi, rax                                ; 10BC _ 48: 01. C6
+        sar     rsi, 1                                  ; 10BF _ 48: D1. FE
+        jz      ?_004                                   ; 10C2 _ 74, 14
+        mov     rax, qword ptr [?_012]                  ; 10C4 _ 48: 8B. 05, 00002F25(rel)
+        test    rax, rax                                ; 10CB _ 48: 85. C0
+        jz      ?_004                                   ; 10CE _ 74, 08
+        jmp     rax                                     ; 10D0 _ FF. E0
+
+; Filling space: 6H
+; Filler type: Multi-byte NOP
+;       db 66H, 0FH, 1FH, 44H, 00H, 00H
+
+ALIGN   8
+?_004:  ret                                             ; 10D8 _ C3
+
+; Filling space: 7H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 80H, 00H, 00H, 00H, 00H
+
+ALIGN   8
+
+__do_global_dtors_aux LABEL NEAR
+        cmp     byte ptr [_edata], 0                    ; 10E0 _ 80. 3D, 00002F41(rel), 00
+        jnz     ?_006                                   ; 10E7 _ 75, 2F
+        push    rbp                                     ; 10E9 _ 55
+        cmp     qword ptr [?_013], 0                    ; 10EA _ 48: 83. 3D, 00002F06(rel), 00
+        mov     rbp, rsp                                ; 10F2 _ 48: 89. E5
+        jz      ?_005                                   ; 10F5 _ 74, 0C
+        mov     rdi, qword ptr [__dso_handle]           ; 10F7 _ 48: 8B. 3D, 00002F22(rel)
+        call    ?_002                                   ; 10FE _ E8, FFFFFF2D(rel)
+?_005:  call    deregister_tm_clones                    ; 1103 _ E8, FFFFFF68
+        mov     byte ptr [_edata], 1                    ; 1108 _ C6. 05, 00002F19(rel), 01
+        pop     rbp                                     ; 110F _ 5D
+        ret                                             ; 1110 _ C3
+
+; Filling space: 7H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 80H, 00H, 00H, 00H, 00H
+
+ALIGN   8
+?_006:  ret                                             ; 1118 _ C3
+
+; Filling space: 7H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 80H, 00H, 00H, 00H, 00H
+
+ALIGN   8
+
+frame_dummy LABEL NEAR
+        jmp     register_tm_clones                      ; 1120 _ E9, FFFFFF7B
+
+main    PROC
+        push    rbp                                     ; 1125 _ 55
+        mov     rbp, rsp                                ; 1126 _ 48: 89. E5
+        mov     eax, 0                                  ; 1129 _ B8, 00000000
+        pop     rbp                                     ; 112E _ 5D
+        ret                                             ; 112F _ C3
+main    ENDP
+
+__libc_csu_init PROC
+        push    r15                                     ; 1130 _ 41: 57
+        lea     r15, [__frame_dummy_init_array_entry]   ; 1132 _ 4C: 8D. 3D, 00002CDF(rel)
+        push    r14                                     ; 1139 _ 41: 56
+        mov     r14, rdx                                ; 113B _ 49: 89. D6
+        push    r13                                     ; 113E _ 41: 55
+        mov     r13, rsi                                ; 1140 _ 49: 89. F5
+        push    r12                                     ; 1143 _ 41: 54
+        mov     r12d, edi                               ; 1145 _ 41: 89. FC
+        push    rbp                                     ; 1148 _ 55
+        lea     rbp, [__do_global_dtors_aux_fini_array_entry]; 1149 _ 48: 8D. 2D, 00002CD0(rel)
+        push    rbx                                     ; 1150 _ 53
+        sub     rbp, r15                                ; 1151 _ 4C: 29. FD
+        sub     rsp, 8                                  ; 1154 _ 48: 83. EC, 08
+        call    _init                                   ; 1158 _ E8, FFFFFEA3(rel)
+        sar     rbp, 3                                  ; 115D _ 48: C1. FD, 03
+        jz      ?_008                                   ; 1161 _ 74, 1B
+        xor     ebx, ebx                                ; 1163 _ 31. DB
+; Filling space: 3H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 00H
+
+ALIGN   8
+?_007:  mov     rdx, r14                                ; 1168 _ 4C: 89. F2
+        mov     rsi, r13                                ; 116B _ 4C: 89. EE
+        mov     edi, r12d                               ; 116E _ 44: 89. E7
+        call    qword ptr [r15+rbx*8]                   ; 1171 _ 41: FF. 14 DF
+        add     rbx, 1                                  ; 1175 _ 48: 83. C3, 01
+        cmp     rbp, rbx                                ; 1179 _ 48: 39. DD
+        jnz     ?_007                                   ; 117C _ 75, EA
+?_008:  add     rsp, 8                                  ; 117E _ 48: 83. C4, 08
+        pop     rbx                                     ; 1182 _ 5B
+        pop     rbp                                     ; 1183 _ 5D
+        pop     r12                                     ; 1184 _ 41: 5C
+        pop     r13                                     ; 1186 _ 41: 5D
+        pop     r14                                     ; 1188 _ 41: 5E
+        pop     r15                                     ; 118A _ 41: 5F
+        ret                                             ; 118C _ C3
+__libc_csu_init ENDP
+
+; Filling space: 3H
+; Filler type: Multi-byte NOP
+;       db 0FH, 1FH, 00H
+
+ALIGN   8
+
+__libc_csu_fini PROC
+        ret                                             ; 1190 _ C3
+__libc_csu_fini ENDP
+
+_text   ENDS
+
+.fini   SEGMENT DWORD 'CODE'                            ; section number 5
+
+_fini   PROC
+        sub     rsp, 8                                  ; 1194 _ 48: 83. EC, 08
+        add     rsp, 8                                  ; 1198 _ 48: 83. C4, 08
+        ret                                             ; 119C _ C3
+_fini   ENDP
+
+.fini   ENDS
+
+.rodata SEGMENT DWORD 'CONST'                           ; section number 6
+
+_IO_stdin_used label dword
+        dd 00020001H                                    ; 2000 _ 131073 
+
+.rodata ENDS
+
+.eh_frame_hdr SEGMENT DWORD 'CONST'                     ; section number 7
+
+__GNU_EH_FRAME_HDR label byte
+        db 01H, 1BH, 03H, 3BH, 38H, 00H, 00H, 00H       ; 2004 _ ...;8...
+        db 06H, 00H, 00H, 00H, 1CH, 0F0H, 0FFH, 0FFH    ; 200C _ ........
+        db 84H, 00H, 00H, 00H, 2CH, 0F0H, 0FFH, 0FFH    ; 2014 _ ....,...
+        db 0ACH, 00H, 00H, 00H, 3CH, 0F0H, 0FFH, 0FFH   ; 201C _ ....<...
+        db 54H, 00H, 00H, 00H, 21H, 0F1H, 0FFH, 0FFH    ; 2024 _ T...!...
+        db 0C4H, 00H, 00H, 00H, 2CH, 0F1H, 0FFH, 0FFH   ; 202C _ ....,...
+        db 0E4H, 00H, 00H, 00H, 8CH, 0F1H, 0FFH, 0FFH   ; 2034 _ ........
+        db 2CH, 01H, 00H, 00H                           ; 203C _ ,...
+
+.eh_frame_hdr ENDS
+
+.eh_frame SEGMENT ALIGN(8) 'CONST'                      ; section number 8
+
+        db 14H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 2040 _ ........
+        db 01H, 7AH, 52H, 00H, 01H, 78H, 10H, 01H       ; 2048 _ .zR..x..
+        db 1BH, 0CH, 07H, 08H, 90H, 01H, 07H, 10H       ; 2050 _ ........
+        db 14H, 00H, 00H, 00H, 1CH, 00H, 00H, 00H       ; 2058 _ ........
+        db 0E0H, 0EFH, 0FFH, 0FFH, 2BH, 00H, 00H, 00H   ; 2060 _ ....+...
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 2068 _ ........
+        db 14H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 2070 _ ........
+        db 01H, 7AH, 52H, 00H, 01H, 78H, 10H, 01H       ; 2078 _ .zR..x..
+        db 1BH, 0CH, 07H, 08H, 90H, 01H, 00H, 00H       ; 2080 _ ........
+        db 24H, 00H, 00H, 00H, 1CH, 00H, 00H, 00H       ; 2088 _ $.......
+        db 90H, 0EFH, 0FFH, 0FFH, 10H, 00H, 00H, 00H    ; 2090 _ ........
+        db 00H, 0EH, 10H, 46H, 0EH, 18H, 4AH, 0FH       ; 2098 _ ...F..J.
+        db 0BH, 77H, 08H, 80H, 00H, 3FH, 1AH, 3BH       ; 20A0 _ .w...?.;
+        db 2AH, 33H, 24H, 22H, 00H, 00H, 00H, 00H       ; 20A8 _ *3$"....
+        db 14H, 00H, 00H, 00H, 44H, 00H, 00H, 00H       ; 20B0 _ ....D...
+        db 78H, 0EFH, 0FFH, 0FFH, 08H, 00H, 00H, 00H    ; 20B8 _ x.......
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 20C0 _ ........
+        db 1CH, 00H, 00H, 00H, 5CH, 00H, 00H, 00H       ; 20C8 _ ....\...
+        db 55H, 0F0H, 0FFH, 0FFH, 0BH, 00H, 00H, 00H    ; 20D0 _ U.......
+        db 00H, 41H, 0EH, 10H, 86H, 02H, 43H, 0DH       ; 20D8 _ .A....C.
+        db 06H, 46H, 0CH, 07H, 08H, 00H, 00H, 00H       ; 20E0 _ .F......
+        db 44H, 00H, 00H, 00H, 7CH, 00H, 00H, 00H       ; 20E8 _ D...|...
+        db 40H, 0F0H, 0FFH, 0FFH, 5DH, 00H, 00H, 00H    ; 20F0 _ @...]...
+        db 00H, 42H, 0EH, 10H, 8FH, 02H, 49H, 0EH       ; 20F8 _ .B....I.
+        db 18H, 8EH, 03H, 45H, 0EH, 20H, 8DH, 04H       ; 2100 _ ...E. ..
+        db 45H, 0EH, 28H, 8CH, 05H, 44H, 0EH, 30H       ; 2108 _ E.(..D.0
+        db 86H, 06H, 48H, 0EH, 38H, 83H, 07H, 47H       ; 2110 _ ..H.8..G
+        db 0EH, 40H, 6AH, 0EH, 38H, 41H, 0EH, 30H       ; 2118 _ .@j.8A.0
+        db 41H, 0EH, 28H, 42H, 0EH, 20H, 42H, 0EH       ; 2120 _ A.(B. B.
+        db 18H, 42H, 0EH, 10H, 42H, 0EH, 08H, 00H       ; 2128 _ .B..B...
+        db 10H, 00H, 00H, 00H, 0C4H, 00H, 00H, 00H      ; 2130 _ ........
+        db 58H, 0F0H, 0FFH, 0FFH, 01H, 00H, 00H, 00H    ; 2138 _ X.......
+        db 00H, 00H, 00H, 00H                           ; 2140 _ ....
+
+__FRAME_END__ label byte
+        db 00H, 00H, 00H, 00H                           ; 2144 _ ....
+
+.eh_frame ENDS
+
+.init_array SEGMENT ALIGN(8) 'DATA'                     ; section number 9
+
+__init_array_start label qword
+__frame_dummy_init_array_entry label qword              ; virtual table or function pointer
+        dq 0000000000001120H                            ; 3E18 _ 0000000000001120 
+
+.init_array ENDS
+
+.fini_array SEGMENT ALIGN(8) 'DATA'                     ; section number 10
+
+__init_array_end label byte
+__do_global_dtors_aux_fini_array_entry label byte
+        db 0E0H, 10H, 00H, 00H, 00H, 00H, 00H, 00H      ; 3E20 _ ........
+
+.fini_array ENDS
+
+.got    SEGMENT ALIGN(8) 'DATA'                         ; section number 11
+
+?_009   label qword                                     ; switch/case jump table
+        dq 0000000000000000H                            ; 3FD8 _ 0000000000000000 
+
+?_010   label qword                                     ; virtual table or function pointer
+        dq 0000000000000000H                            ; 3FE0 _ 0000000000000000 
+
+?_011   label qword                                     ; virtual table or function pointer
+        dq 0000000000000000H                            ; 3FE8 _ 0000000000000000 
+
+?_012   label qword                                     ; switch/case jump table
+        dq 0000000000000000H                            ; 3FF0 _ 0000000000000000 
+
+?_013   label qword                                     ; switch/case jump table
+        dq 0000000000000000H                            ; 3FF8 _ 0000000000000000 
+
+.got    ENDS
+
+.got.plt SEGMENT ALIGN(8) 'DATA'                        ; section number 12
+
+_GLOBAL_OFFSET_TABLE_ label byte
+        db 28H, 3EH, 00H, 00H, 00H, 00H, 00H, 00H       ; 4000 _ (>......
+
+?_014   label qword
+        dq 0000000000000000H                            ; 4008 _ 0000000000000000 
+
+?_015   label qword                                     ; switch/case jump table
+        dq 0000000000000000H                            ; 4010 _ 0000000000000000 
+
+.got.plt ENDS
+
+_data   SEGMENT ALIGN(8) 'DATA'                         ; section number 13
+
+__data_start label byte
+data_start label byte
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 4018 _ ........
+
+__dso_handle label qword
+        dq 0000000000004020H                            ; 4020 _ 0000000000004020 
+
+_data   ENDS
+
+.bss    SEGMENT BYTE 'BSS'                              ; section number 14
+
+__TMC_END__ label byte
+__bss_start label byte
+_edata  label byte
+completed.0 label byte
+        db      8 dup (?)                               ; 4028
+
+.bss    ENDS
+
+.dynsym SEGMENT ALIGN(8) 'CONST'                        ; section number 15
+
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6240 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6248 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6250 _ ........
+        db 38H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 6258 _ 8... ...
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6260 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6268 _ ........
+        db 10H, 00H, 00H, 00H, 12H, 00H, 00H, 00H       ; 6270 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6278 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6280 _ ........
+        db 54H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 6288 _ T... ...
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6290 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6298 _ ........
+        db 63H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 62A0 _ c... ...
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 62A8 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 62B0 _ ........
+        db 01H, 00H, 00H, 00H, 22H, 00H, 00H, 00H       ; 62B8 _ ...."...
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 62C0 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 62C8 _ ........
+
+.dynsym ENDS
+
+.gnu.hash SEGMENT ALIGN(8) 'CONST'                      ; section number 16
+
+        db 02H, 00H, 00H, 00H, 05H, 00H, 00H, 00H       ; 62D0 _ ........
+        db 01H, 00H, 00H, 00H, 06H, 00H, 00H, 00H       ; 62D8 _ ........
+        db 00H, 00H, 81H, 00H, 00H, 00H, 00H, 00H       ; 62E0 _ ........
+        db 05H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 62E8 _ ........
+        db 0D1H, 65H, 0CEH, 6DH                         ; 62F0 _ .e.m
+
+.gnu.hash ENDS
+
+.interp SEGMENT ALIGN(8) 'CONST'                        ; section number 17
+
+        db 2FH, 6CH, 69H, 62H, 36H, 34H, 2FH, 6CH       ; 62F8 _ /lib64/l
+        db 64H, 2DH, 6CH, 69H, 6EH, 75H, 78H, 2DH       ; 6300 _ d-linux-
+        db 78H, 38H, 36H, 2DH, 36H, 34H, 2EH, 73H       ; 6308 _ x86-64.s
+        db 6FH, 2EH, 32H, 00H                           ; 6310 _ o.2.
+
+.interp ENDS
+
+.note.ABI-tag SEGMENT DWORD 'CONST'                     ; section number 18
+
+        db 04H, 00H, 00H, 00H, 10H, 00H, 00H, 00H       ; 6318 _ ........
+        db 01H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 6320 _ ....GNU.
+        db 00H, 00H, 00H, 00H, 03H, 00H, 00H, 00H       ; 6328 _ ........
+        db 02H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 6330 _ ........
+
+.note.ABI-tag ENDS
+
+.note.gnu.build-id SEGMENT DWORD 'CONST'                ; section number 19
+
+        db 04H, 00H, 00H, 00H, 14H, 00H, 00H, 00H       ; 6338 _ ........
+        db 03H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 6340 _ ....GNU.
+        db 56H, 0C2H, 24H, 0F5H, 6DH, 9DH, 0CBH, 22H    ; 6348 _ V.$.m.."
+        db 0B4H, 47H, 38H, 9BH, 0E7H, 92H, 0C1H, 7BH    ; 6350 _ .G8....{
+        db 64H, 65H, 0CEH, 35H                          ; 6358 _ de.5
+
+.note.gnu.build-id ENDS
+
+.gnu.version SEGMENT ALIGN(8) 'CONST'                   ; section number 20
+
+        db 00H, 00H, 00H, 00H, 02H, 00H, 00H, 00H       ; A290 _ ........
+        db 00H, 00H, 02H, 00H                           ; A298 _ ....
+
+.gnu.version ENDS
+
+.gnu.version_r SEGMENT ALIGN(8) 'CONST'                 ; section number 21
+
+        db 01H, 00H, 01H, 00H, 22H, 00H, 00H, 00H       ; A2A0 _ ...."...
+        db 10H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; A2A8 _ ........
+        db 75H, 1AH, 69H, 09H, 00H, 00H, 02H, 00H       ; A2B0 _ u.i.....
+        db 2CH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; A2B8 _ ,.......
+
+.gnu.version_r ENDS
+
+.rela.dyn SEGMENT ALIGN(8) 'CONST'                      ; section number 22
+
+        db 18H, 3EH, 00H, 00H, 00H, 00H, 00H, 00H       ; B2A0 _ .>......
+        db 08H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; B2A8 _ ........
+        db 20H, 11H, 00H, 00H, 00H, 00H, 00H, 00H       ; B2B0 _  .......
+        db 20H, 3EH, 00H, 00H, 00H, 00H, 00H, 00H       ; B2B8 _  >......
+        db 08H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; B2C0 _ ........
+        db 0E0H, 10H, 00H, 00H, 00H, 00H, 00H, 00H      ; B2C8 _ ........
+        db 20H, 40H, 00H, 00H, 00H, 00H, 00H, 00H       ; B2D0 _  @......
+        db 08H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; B2D8 _ ........
+        db 20H, 40H, 00H, 00H, 00H, 00H, 00H, 00H       ; B2E0 _  @......
+        db 0D8H, 3FH, 00H, 00H, 00H, 00H, 00H, 00H      ; B2E8 _ .?......
+        db 06H, 00H, 00H, 00H, 01H, 00H, 00H, 00H       ; B2F0 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; B2F8 _ ........
+        db 0E0H, 3FH, 00H, 00H, 00H, 00H, 00H, 00H      ; B300 _ .?......
+        db 06H, 00H, 00H, 00H, 02H, 00H, 00H, 00H       ; B308 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; B310 _ ........
+        db 0E8H, 3FH, 00H, 00H, 00H, 00H, 00H, 00H      ; B318 _ .?......
+        db 06H, 00H, 00H, 00H, 03H, 00H, 00H, 00H       ; B320 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; B328 _ ........
+        db 0F0H, 3FH, 00H, 00H, 00H, 00H, 00H, 00H      ; B330 _ .?......
+        db 06H, 00H, 00H, 00H, 04H, 00H, 00H, 00H       ; B338 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; B340 _ ........
+        db 0F8H, 3FH, 00H, 00H, 00H, 00H, 00H, 00H      ; B348 _ .?......
+        db 06H, 00H, 00H, 00H, 05H, 00H, 00H, 00H       ; B350 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; B358 _ ........
+
+.rela.dyn ENDS
+
+.dynamic SEGMENT ALIGN(8) 'DATA'                        ; section number 23
+
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013000 _ ........
+        db 0A4H, 00H, 00H, 00H, 00H, 00H, 00H, 00H      ; 00013008 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013010 _ ........
+        db 0A1H, 00H, 00H, 00H, 00H, 00H, 00H, 00H      ; 00013018 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013020 _ ........
+        db 9EH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013028 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013030 _ ........
+        db 9BH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013038 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013040 _ ........
+        db 98H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013048 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013050 _ ........
+        db 95H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013058 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013060 _ ........
+        db 92H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013068 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013070 _ ........
+        db 8FH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013078 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013080 _ ........
+        db 8CH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013088 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013090 _ ........
+        db 89H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013098 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130A0 _ ........
+        db 86H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130A8 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130B0 _ ........
+        db 83H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130B8 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130C0 _ ........
+        db 80H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130C8 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130D0 _ ........
+        db 7DH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130D8 _ }.......
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130E0 _ ........
+        db 22H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130E8 _ ".......
+        db 0CH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130F0 _ ........
+        db 00H, 10H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000130F8 _ ........
+        db 0DH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013100 _ ........
+        db 94H, 11H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013108 _ ........
+        db 19H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013110 _ ........
+        db 18H, 3EH, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013118 _ .>......
+        db 1BH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013120 _ ........
+        db 08H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013128 _ ........
+        db 1AH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013130 _ ........
+        db 20H, 3EH, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013138 _  >......
+        db 1CH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013140 _ ........
+        db 08H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013148 _ ........
+        db 0F5H, 0FEH, 0FFH, 6FH, 00H, 00H, 00H, 00H    ; 00013150 _ ...o....
+        db 0D0H, 62H, 00H, 00H, 00H, 00H, 00H, 00H      ; 00013158 _ .b......
+        db 05H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013160 _ ........
+        db 90H, 32H, 01H, 00H, 00H, 00H, 00H, 00H       ; 00013168 _ .2......
+        db 06H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013170 _ ........
+        db 40H, 62H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013178 _ @b......
+        db 0AH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013180 _ ........
+        db 0A7H, 00H, 00H, 00H, 00H, 00H, 00H, 00H      ; 00013188 _ ........
+        db 0BH, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013190 _ ........
+        db 18H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013198 _ ........
+        db 15H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000131A0 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000131A8 _ ........
+        db 03H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000131B0 _ ........
+        db 00H, 40H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000131B8 _ .@......
+        db 07H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000131C0 _ ........
+        db 0A0H, 0B2H, 00H, 00H, 00H, 00H, 00H, 00H     ; 000131C8 _ ........
+        db 08H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000131D0 _ ........
+        db 0C0H, 00H, 00H, 00H, 00H, 00H, 00H, 00H      ; 000131D8 _ ........
+        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000131E0 _ ........
+        db 18H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 000131E8 _ ........
+        db 0FBH, 0FFH, 0FFH, 6FH, 00H, 00H, 00H, 00H    ; 000131F0 _ ...o....
+        db 00H, 00H, 00H, 08H, 00H, 00H, 00H, 00H       ; 000131F8 _ ........
+        db 0FEH, 0FFH, 0FFH, 6FH, 00H, 00H, 00H, 00H    ; 00013200 _ ...o....
+        db 0A0H, 0A2H, 00H, 00H, 00H, 00H, 00H, 00H     ; 00013208 _ ........
+        db 0FFH, 0FFH, 0FFH, 6FH, 00H, 00H, 00H, 00H    ; 00013210 _ ...o....
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013218 _ ........
+        db 0F0H, 0FFH, 0FFH, 6FH, 00H, 00H, 00H, 00H    ; 00013220 _ ...o....
+        db 90H, 0A2H, 00H, 00H, 00H, 00H, 00H, 00H      ; 00013228 _ ........
+        db 0F9H, 0FFH, 0FFH, 6FH, 00H, 00H, 00H, 00H    ; 00013230 _ ...o....
+        db 03H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013238 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013240 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013248 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013250 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013258 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013260 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013268 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013270 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013278 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013280 _ ........
+        db 00H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 00013288 _ ........
+
+.dynamic ENDS
+
+.dynstr SEGMENT ALIGN(8) 'CONST'                        ; section number 24
+
+        db 00H, 5FH, 5FH, 63H, 78H, 61H, 5FH, 66H       ; 00013290 _ .__cxa_f
+        db 69H, 6EH, 61H, 6CH, 69H, 7AH, 65H, 00H       ; 00013298 _ inalize.
+        db 5FH, 5FH, 6CH, 69H, 62H, 63H, 5FH, 73H       ; 000132A0 _ __libc_s
+        db 74H, 61H, 72H, 74H, 5FH, 6DH, 61H, 69H       ; 000132A8 _ tart_mai
+        db 6EH, 00H, 6CH, 69H, 62H, 63H, 2EH, 73H       ; 000132B0 _ n.libc.s
+        db 6FH, 2EH, 36H, 00H, 47H, 4CH, 49H, 42H       ; 000132B8 _ o.6.GLIB
+        db 43H, 5FH, 32H, 2EH, 32H, 2EH, 35H, 00H       ; 000132C0 _ C_2.2.5.
+        db 5FH, 49H, 54H, 4DH, 5FH, 64H, 65H, 72H       ; 000132C8 _ _ITM_der
+        db 65H, 67H, 69H, 73H, 74H, 65H, 72H, 54H       ; 000132D0 _ egisterT
+        db 4DH, 43H, 6CH, 6FH, 6EH, 65H, 54H, 61H       ; 000132D8 _ MCloneTa
+        db 62H, 6CH, 65H, 00H, 5FH, 5FH, 67H, 6DH       ; 000132E0 _ ble.__gm
+        db 6FH, 6EH, 5FH, 73H, 74H, 61H, 72H, 74H       ; 000132E8 _ on_start
+        db 5FH, 5FH, 00H, 5FH, 49H, 54H, 4DH, 5FH       ; 000132F0 _ __._ITM_
+        db 72H, 65H, 67H, 69H, 73H, 74H, 65H, 72H       ; 000132F8 _ register
+        db 54H, 4DH, 43H, 6CH, 6FH, 6EH, 65H, 54H       ; 00013300 _ TMCloneT
+        db 61H, 62H, 6CH, 65H, 00H, 7DH, 00H, 00H       ; 00013308 _ able.}..
+        db 39H, 00H, 00H, 35H, 00H, 00H, 35H, 00H       ; 00013310 _ 9..5..5.
+        db 00H, 62H, 00H, 00H, 64H, 00H, 00H, 38H       ; 00013318 _ .b..d..8
+        db 00H, 00H, 64H, 00H, 00H, 31H, 00H, 00H       ; 00013320 _ ..d..1..
+        db 7BH, 00H, 00H, 47H, 00H, 00H, 41H, 00H       ; 00013328 _ {..G..A.
+        db 00H, 4CH, 00H, 00H, 46H, 00H, 00H            ; 00013330 _ .L..F..
+
+.dynstr ENDS
+
+; Error: Relocation number 1 has a non-existing source address. Section: 0 Offset: 00003E18H
+; Error: Relocation number 2 has a non-existing source address. Section: 0 Offset: 00003E20H
+; Error: Relocation number 3 has a non-existing source address. Section: 0 Offset: 00003FD8H
+; Error: Relocation number 4 has a non-existing source address. Section: 0 Offset: 00003FE0H
+; Error: Relocation number 5 has a non-existing source address. Section: 0 Offset: 00003FE8H
+; Error: Relocation number 6 has a non-existing source address. Section: 0 Offset: 00003FF0H
+; Error: Relocation number 7 has a non-existing source address. Section: 0 Offset: 00003FF8H
+; Error: Relocation number 8 has a non-existing source address. Section: 0 Offset: 00004020H
+
+END
