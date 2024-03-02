@@ -1,0 +1,62 @@
+compile binary file with chmod +x file
+
+open file: gdb ./file
+run file: run
+register state: info registers
+
+La sua sintassi è print/f expr o print expr, dove:
+
+print è il comando
+f è il formato con il quale stampare il risultato dell'espressione:
+  x per l'esadecimale
+  f per i float
+  d per i numeri interi con segno
+  u per i numeri interi unsigned
+
+expr può essere un registro, come ad esempio $rax, 
+ma può anche essere un espressione aritmetica come $rax+0x100.
+
+---------------------------------------------------------------------------------------
+
+La sintassi del comando per ispezionare la memoria é x/nfu addr, dove:
+
+x -> Examine (esamina)
+n -> Numero intero che specifica quanti elementi stampare (opzionale, di default 1)
+f -> Formato con il quale stampare la memoria, per esempio: (opzionale, di default x)
+  s per le stringhe
+  i per il disassembly
+  x per l'esadecimale
+  f per i float
+  d per i numeri interi con segno
+
+u -> La dimensione di ogni elemento da stampare, per esempio: (opzionale, di default w):
+  b Bytes
+  h Halfwords (2 bytes)
+  w Words (4 bytes)
+  g Giant words (8 bytes)
+
+----------------------------------------------------------------------------------------
+
+Con gdb è possibile inserire breakpoint utilizzando l'istruzione break, abbreviata b.
+
+I due casi più frequenti sono break *addresse break function.
+
+Il primo crea un breakpoint che viene azionato quando il programma esegue l'istruzione 
+che si trova all'indirizzo address.
+Mentre il secondo permette di mettere un breakpoint direttamente su una funzione.
+
+Possiamo specificare address come offset rispetto ad una funzione, per esempio b *main+10 
+mette un breakpoint sull'istruzione che si trova 10 byte dopo l'inizio della funzione main.
+
+Questa sintassi risulta utile quando combinata con l'istruzione disassemble function_name, 
+che permette di disassemblare il contenuto di una funzione mostrando gli offset delle varie 
+istruzioni rispetto all'indirizzo della funzione.
+
+-----------------------------------------------------------------------------------------
+
+Il comando per cambiare contenuto di una variabile è set {type}address = value, 
+dove type indica il tipo della variabile all'indirizzo address. 
+Per esempio set {int}0x650000 = 0x42.
+
+Per trovare l'indirizzo di una variabile globale si può utilizzare il comando print insieme a &. 
+Ad esempio p &var.

@@ -1,0 +1,12 @@
+#include <stdio.h>
+
+int main(){
+    unsigned char flag[] = {0x66,0x65,0x61,0x67,0x7b,0x66,0x63,0x32,0x66,0x34,0x34,0x39,0x62,0x7d, 0x0};
+    int i;
+    size_t size = sizeof(flag) /sizeof(flag[0]);
+    for (i=0;i<size;i=i+1){
+      printf("%c", flag[i]);
+    }
+    printf("\n");
+    return 0;
+}
